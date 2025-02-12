@@ -5,3 +5,10 @@ RUN pip install --upgrade pip
 
 # Set the working directory
 WORKDIR /workspace
+
+# Copy requirements.txt and install Python dependencies
+COPY requirements.txt /workspace/
+RUN pip install -r requirements.txt
+
+# Verify installation
+RUN pip list
