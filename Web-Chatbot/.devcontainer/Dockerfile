@@ -7,7 +7,7 @@ RUN pip install --upgrade pip
 WORKDIR /workspace
 
 # Copy requirements.txt and install Python dependencies
-COPY requirements.txt /workspace/
+COPY Web-Chatbot/requirements.txt /workspace/
 RUN pip install -r requirements.txt
 
 # Verify installation
