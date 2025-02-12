@@ -42,4 +42,4 @@ This project involves creating a chatbot that interacts with a given website URL
 
 ## Demonstration
 
-![Chatbot](chatbot.gif)
+![Chatbot](./chatbot.gif)
