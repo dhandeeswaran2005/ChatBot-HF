@@ -8,7 +8,6 @@ import _pickle
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 with open("data.pkl", "rb") as f:

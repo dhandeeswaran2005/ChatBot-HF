@@ -1,67 +1,69 @@
+import streamlit as st
 import requests
-import os
+from dotenv import load_dotenv
 import _pickle
 import time
 
-# Define the API URL and headers
-API_URL = "https://api-inference.huggingface.co/models/consciousAI/question-answering-roberta-base-s-v2"
-api_key = str(input('Enter HF API KEY:'))
-
-if not api_key:
-    raise ValueError("API_KEY environment variable is not set")
-headers = {"Authorization": f"Bearer {api_key}"}
-
-def query(payload):
+# Define the query function
+def query(payload, api_key):
+    headers = {"Authorization": api_key}
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
 
-def chat_with_gpt(question, context):
+# Define the chat function
+def chat_with_gpt(question, context, api_key):
     try:
         output = query({
             "inputs": {
                 "question": question,
                 "context": context,
             },
-        })
+        }, api_key)
     except Exception as e:
-        print("An error occurred:", e)
+        st.error(f"An error occurred: {e}")
         return None
 
     if 'estimated_time' in output:
-        print(f"Model loading, {output['estimated_time']} sec", output)
+        st.info(f"Model loading, {output['estimated_time']} sec")
         time.sleep(output['estimated_time'])
-        print('Model Running')
         output = query({
             "inputs": {
                 "question": question,
                 "context": context,
             },
-        })
+        }, api_key)
     return output
 
-question = "what is BotPenguin?"
-
+# Load the context data
 with open("Web-Chatbot/data.pkl", "rb") as f:
     loaded_data = _pickle.load(f)
 context = loaded_data.get('context', None)
 
-output = chat_with_gpt(question, context)
+# Show title and description
+st.title("💬 Chatbot")
+st.write(
+    "This is a simple chatbot that uses an AI model to generate answers. "
+    "To use this app, you need to provide a HuggingFace API key, which you can get [here](https://huggingface.co/settings/tokens)."
+)
 
-# Generating answer and print the result
-try:
-    print(question, '\n', "Generating answer: ", output["answer"])
-except Exception as e:
-    print("An error occurred while generating the answer:", e)
+api_key = st.text_input("HuggingFace API Key", type="password")
+if not api_key:
+    st.info("Please add your HuggingFace API key to continue.", icon="🗝️")
 
-while True:
-    question = input("Ask a question or exit: ")
-    if question.lower() == 'exit':
-        break
-    try:
-        output = chat_with_gpt(question, context)
+# Define the API URL
+API_URL = "https://api-inference.huggingface.co/models/consciousAI/question-answering-roberta-base-s-v2"
+
+question = st.text_input("Your question", "")
+
+if st.button("Ask"):
+    if question:
+        output = chat_with_gpt(question, context, api_key)
         if output:
-            print(f"Generating answer: {output['answer']}\n\n", end='')
-        else:
-            print("No output received from the model.")
-    except Exception as e:
-        print("An error occurred:", e)
+            st.write(f"Question: {question}")
+            st.write(f"Answer: {output['answer']}")
+    else:
+        st.warning("Please enter a question.")
+
+# Option to exit the chat
+if st.button("Exit"):
+    st.stop()
