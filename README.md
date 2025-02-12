@@ -45,7 +45,7 @@ This project involves creating a chatbot that interacts with a given website URL
 
 - The chatbot interacts with the Hugging Face question-answering pipeline, and the scraped data is stored in a pickled file for reuse.
 # Demonstration
-![Chatbot.gif](chatbot.gif)
+![Chatbot.gif](Chatbot_python/chatbot.gif)
 # Objective: 
 * Create a chatbot using the ChatGPT API that interacts with a given website URL. Although no front end is required, the chatbot must be demonstrable via console.*
 
