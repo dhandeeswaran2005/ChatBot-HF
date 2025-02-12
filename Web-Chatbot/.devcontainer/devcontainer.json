@@ -1,0 +1,19 @@
+{
+    "name": "Web-Chatbot Dev Container",
+    "dockerFile": "Dockerfile",
+    "context": "..",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-azuretools.vscode-docker"
+    ],
+    "postCreateCommand": "pip install -r requirements.txt",
+    "remoteUser": "vscode",
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+    ],
+    "workspaceFolder": "/workspace"
+}

@@ -5,7 +5,10 @@ import time
 
 # Define the API URL and headers
 API_URL = "https://api-inference.huggingface.co/models/consciousAI/question-answering-roberta-base-s-v2"
-api_key = str(input('Enter HF API KEY:'))
+if 'API_KEY' in os.environ:
+    api_key = os.getenv('API_KEY')
+else:
+    api_key = str(input('Enter HF API KEY:'))
 
 if not api_key:
     raise ValueError("API_KEY environment variable is not set")
