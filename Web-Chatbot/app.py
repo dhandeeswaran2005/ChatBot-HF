@@ -1,43 +1,5 @@
 import streamlit as st
-import requests
-from dotenv import load_dotenv
-import _pickle
-import time
-
-# Define the query function
-def query(payload, api_key):
-    headers = {"Authorization": api_key}
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
-
-# Define the chat function
-def chat_with_gpt(question, context, api_key):
-    try:
-        output = query({
-            "inputs": {
-                "question": question,
-                "context": context,
-            },
-        }, api_key)
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-        return None
-
-    if 'estimated_time' in output:
-        st.info(f"Model loading, {output['estimated_time']} sec")
-        time.sleep(output['estimated_time'])
-        output = query({
-            "inputs": {
-                "question": question,
-                "context": context,
-            },
-        }, api_key)
-    return output
-
-# Load the context data
-with open("Web-Chatbot/data.pkl", "rb") as f:
-    loaded_data = _pickle.load(f)
-context = loaded_data.get('context', None)
+import api
 
 # Show title and description
 st.title("💬 Chatbot")
